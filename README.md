@@ -1,44 +1,222 @@
-# rpi5gs
+<h1 align="center">rpi5gs</h1>
 
-An Apple IIGS (ROM 3) for the Raspberry Pi 5, in a window of its own:
-[esp32gs](https://github.com/rlucencic/esp32gs)'s IIGS (Clemens's machine
-with esp32emu's 65C816) on the [rpi5emu](https://github.com/rlucencic/rpi5emu)
-runtime.
+<p align="center">
+  <b>An Apple IIGS on the Raspberry Pi 5, in a window of its own.</b><br>
+  ROM 3, GS/OS 6 from floppies or hard disks, Super Hi-Res and all the Apple II modes, Ensoniq sound.
+</p>
 
-- GS/OS 6 from floppies (3.5" and 5.25": PO, 2MG, DSK, DO, WOZ) or hard
-  disks (HDV, PO, 2MG), Super Hi-Res and all the Apple II modes, Ensoniq
-  sound, 1 to 8 MB of RAM.
-- The setup screen (memory, sound, the drives), the web page for the disk
-  images, the console, as the rest of the family.
+<p align="center">
+  <img alt="Raspberry Pi 5" src="https://img.shields.io/badge/Raspberry%20Pi-5-c51a4a">
+  <img alt="Linux arm64" src="https://img.shields.io/badge/Linux-arm64-333">
+  <img alt="SDL 3" src="https://img.shields.io/badge/SDL-3-1d4ed8">
+  <img alt="CPU" src="https://img.shields.io/badge/CPU-65C816-555">
+  <img alt="MIT licence" src="https://img.shields.io/badge/licence-MIT-green">
+</p>
 
-## Building
+<p align="center">
+  <b>Work in progress:</b> not everything has been tested, and games and demos may or may not
+  work satisfactorily.
+</p>
 
-See [rpi5emu](https://github.com/rlucencic/rpi5emu#building): esp32emu,
-rpi5emu, esp32gs and rpi5gs cloned side by side, then
+<p align="center">
+  <img alt="The IIGS's ROM 3 without a disk: Check startup device!" src="docs/images/startup.png" width="49%">
+  <img alt="Applesoft after Control-Reset: PRINT &quot;HELLO FROM THE PI 5&quot; run" src="docs/images/applesoft.png" width="49%">
+  <br>
+  <sub>The IIGS's ROM 3 looking for a startup disk, and Applesoft after Control-Reset, on the Pi.</sub>
+</p>
+
+rpi5gs runs [esp32gs](https://github.com/rlucencic/esp32gs)'s IIGS on a Raspberry Pi 5 with
+64-bit Linux, in a window of its own (X11 or Wayland, through SDL 3). The machine is the
+same code as on the ESP32 boards: esp32gs's platform-independent core and
+[esp32emu](https://github.com/rlucencic/esp32emu)'s CPU core, on
+[rpi5emu](https://github.com/rlucencic/rpi5emu), the family's Linux runtime: a setup
+screen in the window, sound, the Pi's keyboard and mouse, a web page on your network and a
+console.
+
+It's one of the rpi5 family, the Raspberry Pi versions of the esp32 emulators:
+[rpi5zx](https://github.com/rlucencic/rpi5zx) (ZX Spectrum),
+[rpi5cpc](https://github.com/rlucencic/rpi5cpc) (Amstrad CPC),
+[rpi5cbm](https://github.com/rlucencic/rpi5cbm) (Commodore 64 and 128),
+[rpi5coco](https://github.com/rlucencic/rpi5coco) (Tandy Color Computer 2 and 3),
+[rpi5msx](https://github.com/rlucencic/rpi5msx) (MSX1 and MSX2),
+[rpi5xl](https://github.com/rlucencic/rpi5xl) (Atari 800XL and 130XE),
+[rpi5ste](https://github.com/rlucencic/rpi5ste) (Atari STE),
+[rpi5pc](https://github.com/rlucencic/rpi5pc) (IBM PC/XT and PC/AT),
+[rpi5mac](https://github.com/rlucencic/rpi5mac) (Macintosh Plus, SE, Classic),
+[rpi5mac2](https://github.com/rlucencic/rpi5mac2) (Macintosh LC and II),
+[rpi5mac3](https://github.com/rlucencic/rpi5mac3) (Macintosh LC II and LC III),
+[rpi5arc](https://github.com/rlucencic/rpi5arc) (Acorn Archimedes),
+[rpi5ami](https://github.com/rlucencic/rpi5ami) (Amiga 500, 2000, 600, 1200).
+
+## Features
+
+**The machine**
+- **Apple IIGS, ROM 3**: 1, 2, 4 or 8 MB, chosen on the
+  setup screen
+- **65C816** at 2.8 or 1 MHz as the IIGS switches, emulation and native
+  mode; checked against the 5 million SingleStepTests
+- **Video**: Super Hi-Res 320 and 640 with a palette per line and fill
+  mode, text in 40 and 80 columns with MouseText, lores, double lores, hires
+  and double hires, mixed modes, the border colour
+- **Sound**: the Ensoniq DOC's 32 oscillators and the Apple II speaker
+- **ADB keyboard and mouse**, the clock and battery RAM (the control panel's
+  settings are kept)
+
+**Drives**
+- **3.5"** (slot 5): 800 KB and 400 KB disks, `.po`, `.2mg`, `.woz`
+- **5.25"** (slot 6): 140 KB disks, `.dsk`/`.do` (DOS order), `.po`, `.woz`
+- **Two hard disks** (a card in slot 7): ProDOS block images of any size up
+  to 32 MB, `.po`, `.hdv`, `.2mg`, read and written in place
+- Writes go back into the image files (floppies a second after the drive's
+  motor stops); `.woz` is read-only
+- **New blank disks**: 800 KB, 140 KB, 16 or 32 MB, ready for GS/OS to
+  initialise
+
+**Around it**
+- **A window** of its own on the Pi's desktop (X11 or Wayland), resizable, full screen
+  with Ctrl+Alt+F; the picture in the machine's shape, smoothly scaled
+- **Setup screen** in the window, first thing at start and any time with Ctrl+Alt+M:
+  memory, the sound's volume, the drives and their images (insert, eject, new
+  blank ones), Start / Back / Restart, Reset
+- **The Pi's keyboard and mouse**: keys by position, as the boards' Bluetooth keyboards;
+  a click in the window gives the mouse to the machine, Ctrl+Alt+G takes it back
+- **Web page** at `http://<the Pi>:8080/`: drop images (or ZIP files) onto it, insert
+  them, make blank ones, and watch the machine and its drives live
+- **Sound** through SDL (PipeWire, PulseAudio or ALSA), the machine paced by the clock
+- **Console** on the terminal and on `127.0.0.1:6400`: keys, typing, drives, screenshots
+
+<p align="center">
+  <img src="docs/images/setup.png" width="80%" alt="The setup screen in the window: the IIGS's choices, the sound, Disks and Start">
+  <br><sub>The setup screen in the window, before the IIGS starts</sub>
+</p>
+
+## Getting started
+
+### 1. What you need
+
+- A Raspberry Pi 5 with 64-bit Linux (developed on Ubuntu 26.04; any Linux with SDL 3.2 or
+  later should do)
+- The tools and libraries:
+  `sudo apt install build-essential cmake ninja-build pkg-config libsdl3-dev libsdl3-ttf-dev libpng-dev`
+- [esp32emu](https://github.com/rlucencic/esp32emu), [rpi5emu](https://github.com/rlucencic/rpi5emu)
+  and [esp32gs](https://github.com/rlucencic/esp32gs), cloned next to this project
+- The ROMs (below)
+
+### 2. Build
 
 ```sh
-cd rpi5gs && cmake -S . -B build -G Ninja && cmake --build build
+git clone https://github.com/rlucencic/esp32emu.git
+git clone https://github.com/rlucencic/rpi5emu.git
+git clone https://github.com/rlucencic/esp32gs.git
+git clone https://github.com/rlucencic/rpi5gs.git && cd rpi5gs
+cmake -S . -B build -G Ninja && cmake --build build
 ```
 
-## ROMs
+### 3. ROMs
 
 In the data folder's `roms/` (`~/rpi5emu/roms`), named as esp32gs's:
 `gs_rom3.rom` (256 KB) and `chargen.rom` (4 KB). Not part of this
 repository.
 
-## Running
+### 4. First start
 
-```sh
-build/rpi5gs                          # the setup screen first
-build/rpi5gs -S --choice Memory="4 MB"
-build/rpi5gs System.Disk.po           # with a disk in the 3.5" drive
+1. `build/rpi5gs`: the setup screen opens in a window.
+2. Choose the memory and click **Start**.
+3. Put images into `~/rpi5emu/apple2gs/`, drop them on the window or the web page, and
+   insert them on the setup screen's **Disks** page.
+
+## Using it
+
+| To | Do |
+|---|---|
+| Get back to the setup screen | Ctrl+Alt+M (the machine waits meanwhile) |
+| Full screen | Ctrl+Alt+F |
+| Give the mouse to the machine, take it back | A click in the window; Ctrl+Alt+G |
+| Run as fast as it goes (warp) | Ctrl+Alt+W, again for real speed |
+| Take a screenshot | Ctrl+Alt+S (into `~/rpi5emu/screenshots`), or the console's `s` |
+| Insert an image | The setup screen's **Disks** page, drop it on the window or the web page, or name it on the command line: `build/rpi5gs System.Disk.po` |
+| Start straight into the machine | `build/rpi5gs -S`, with the setup screen's rows as `--choice`: `build/rpi5gs -S --choice "Memory=4 MB"` |
+| Show the window on another computer | Log in with `ssh -C -Y <the Pi>` and start it there: fine for still pictures; games want the Pi's own monitor |
+| Use a 3.5" disk under GS/OS | Insert it while GS/OS runs: its icon appears on the desktop. **Eject** in the Finder takes it out of the drive |
+| Get to Applesoft BASIC | Control-Reset (Control-F12) while the IIGS looks for a disk |
+
+Images live in `~/rpi5emu/apple2gs/`, settings in `~/.config/rpi5emu/settings.ini`; the
+inserted images are remembered across starts. `build/rpi5gs --help` lists the options.
+
+**Keyboard**: by position, as on Apple's keyboard (US). Return, Esc, Tab,
+Delete (Backspace), Caps Lock, the cursor keys and the keypad as themselves;
+Ctrl is Control, Alt is Option, the Windows or Command key is the open apple
+(Command); F12 or Pause is Reset (Control-F12: Control-Reset;
+Control-Command-F12 restarts).
+
+## How it works
+
+```mermaid
+flowchart LR
+  subgraph emu [Emulation thread]
+    EMU["Emulation<br>65C816 · Mega II · VGC<br>DOC · IWM · ADB · slot 7"]
+  end
+  subgraph main [Main thread]
+    WIN["Window · setup screen<br>SDL 3"]
+  end
+  subgraph others [Other threads]
+    WEB[Web page :8080]
+    CON[Console :6400]
+  end
+  EMU -- picture --> WIN
+  EMU -- sound --> SND[SDL audio]
+  WIN -- keys · mouse --> EMU
+  DATA[("~/rpi5emu<br>roms · apple2gs")]
+  EMU <--> DATA
+  WEB <--> DATA
 ```
 
-Disks live in `~/rpi5emu/apple2gs/`. The keyboard by position, as Apple's
-ADB keyboard: Alt is Option, the Windows key Command (the open apple), F12
-or Pause the Reset key (Control-F12: Control-Reset; Control-Command-Esc:
-the control panel). The mouse after a click in the window.
+- **[esp32gs](https://github.com/rlucencic/esp32gs)'s `components/apple2gs`**: the IIGS,
+  platform independent: the same code runs on the ESP32 boards.
+- **`src/`**: the glue, esp32gs's `main/main.c` ported: memory, ROMs, settings, keyboard map,
+  drives and status.
+- **[rpi5emu](https://github.com/rlucencic/rpi5emu)**: the window, the setup screen, sound,
+  input, the web page, the console, the data folder and the settings.
+- **[esp32emu](https://github.com/rlucencic/esp32emu)**: the CPU core (65C816).
+
+## Development
+
+```sh
+../rpi5emu/tools/pi.sh rpi5gs build        # from another computer: sync to the Pi, build there
+../rpi5emu/tools/pi.sh rpi5gs run          # its window on this computer (ssh -C -Y)
+../rpi5emu/tools/pi.sh rpi5gs headless     # no window: drive it through the console
+../rpi5emu/tools/console.sh i 's /tmp/shot.png'
+```
+
+`CLAUDE.md` has the details: the layout, how it was ported, the checks; esp32gs's own
+`CLAUDE.md` has the machine's.
+
+## Limitations
+
+- Checked on the Pi through its console and screenshots: ROM 3 at full speed to its startup screen; Control-Reset to Applesoft and typing. Not yet by hand
+  in the window, with the sound heard, or with much software.
+- Over X forwarding (`ssh -Y`) every changed picture crosses the network: 8 to 15 a second.
+- Tried so far: ROM 3's startup and Applesoft, GS/OS 6.0.1 and 6.0.4 from
+  floppies and hard disks, the Finder (windows, menus, About), a floppy
+  inserted while GS/OS runs, DOS 3.3 (CATALOG, SAVE, RUN), the Tour of the
+  Apple IIGS. **Games and most applications haven't been tried yet.**
+- No serial ports, printer, AppleTalk or MIDI; one 3.5" and one 5.25" drive
+  (no second ones); no nibble (`.nib`) images; `.woz` read-only.
+
+## Credits
+
+- [Clemens](https://github.com/samkusin/clemens_iigs) by Samir Sinha (MIT):
+  the IIGS's memory map, Mega II, VGC, ADB, clock, DOC, IWM, disk images and
+  the slot 7 hard disk card
+- Tom Harte's [SingleStepTests](https://github.com/SingleStepTests/65816) for
+  the 65C816 core
+- The [Apple II Documentation Project](https://mirrors.apple2.org.za/Apple%20II%20Documentation%20Project/)
+  for the system software images
+- [SDL](https://libsdl.org) 3 for the window, the sound and the input
 
 ## Licence
 
-MIT.
+[MIT](LICENSE).
+
+Apple, Apple IIGS and GS/OS are trademarks of Apple Inc. The ROM images and
+system software are not part of this repository.
