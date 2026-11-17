@@ -91,8 +91,8 @@ static bool start(void)
     }
     if (!rom_store_load(ROM_GS3, s_rom) || !rom_store_load(ROM_CHARGEN, s_chargen)) {
         static char message[1400];
-        snprintf(message, sizeof(message), "No ROMs: copy gs_rom3.rom and chargen.rom into %s/roms.",
-                 emu_data_dir());
+        snprintf(message, sizeof(message), "No ROMs: copy gs_rom3.rom and chargen.rom into %s.",
+                 emu_rom_dir());
         emu_set_message(message);
         return false;
     }

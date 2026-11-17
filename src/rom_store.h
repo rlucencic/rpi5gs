@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 /*
- * The IIGS's ROMs: files in the data folder's roms/ (emu_rom_read()), named
+ * The IIGS's ROMs: files in the machine's roms/ folder (emu_rom_read()), named
  * as esp32gs's.
  */
 typedef enum {

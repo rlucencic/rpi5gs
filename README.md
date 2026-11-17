@@ -114,8 +114,8 @@ cmake -S . -B build -G Ninja && cmake --build build
 
 ### 3. ROMs
 
-In the data folder's `roms/` (`~/rpi5emu/roms`), named as esp32gs's:
-`gs_rom3.rom` (256 KB) and `chargen.rom` (4 KB). Not part of this
+In the data folder's `apple2gs/roms/` (`~/rpi5emu/apple2gs/roms`), named as
+esp32gs's: `gs_rom3.rom` (256 KB) and `chargen.rom` (4 KB). Not part of this
 repository.
 
 ### 4. First start
@@ -166,7 +166,7 @@ flowchart LR
   EMU -- picture --> WIN
   EMU -- sound --> SND[SDL audio]
   WIN -- keys · mouse --> EMU
-  DATA[("~/rpi5emu<br>roms · apple2gs")]
+  DATA[("~/rpi5emu<br>apple2gs · apple2gs/roms")]
   EMU <--> DATA
   WEB <--> DATA
 ```

@@ -12,7 +12,7 @@ project is the glue.
 |---|---|
 | `src/main.c` | The IIGS as an `emu_machine_t`: esp32gs's `main/main.c` through `../rpi5emu/tools/port_glue.py` and `port_finish.py`, then: memory up to 8 MB as on the Tab5, a new size allocated at the restart (the boards restart into it), the ROM message, no speaker stats; the core's host-build switches (`gs_host_no_iwm_skip`, ...) defined off |
 | `src/settings.c` | esp32gs's, over `emu/nvs.h` (section `gs`: `ram_kb`, `bram` the battery RAM as hex) |
-| `src/rom_store.c` | `~/rpi5emu/roms/` through `emu_rom_read()`: gs_rom3.rom, chargen.rom |
+| `src/rom_store.c` | `~/rpi5emu/apple2gs/roms/` through `emu_rom_read()`: gs_rom3.rom, chargen.rom |
 
 Keep `src/main.c` in step with esp32gs's `main/main.c`. The core's
 `#ifndef ESP_PLATFORM` parts are its host test build's instrumentation
