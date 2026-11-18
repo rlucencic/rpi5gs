@@ -1,8 +1,8 @@
 /*
- * Apple IIGS emulator on the Raspberry Pi 5.
+ * Apple IIGS emulator with SDL 3.
  *
  * The Pi's side (window, sound, keyboard, setup screen, web page, console,
- * settings, the data folder) is the shared runtime in ../rpi5emu, the
+ * settings, the data folder) is the shared runtime in ../sdlemu, the
  * machine esp32gs's; this file plugs the IIGS into it, as esp32gs's
  * main/main.c does on the boards (and mostly is that file): memory,
  * ROMs, settings, the battery RAM, keyboard and mouse, the drives

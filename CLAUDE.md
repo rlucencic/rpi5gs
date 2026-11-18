@@ -1,7 +1,7 @@
-# rpi5gs: the Apple IIGS on the Raspberry Pi 5
+# sdlgs: the Apple IIGS on Linux and macOS through SDL 3
 
 esp32gs's IIGS (`../esp32gs/components/apple2gs`: its glue and Clemens's
-machine, platform independent) on the rpi5emu runtime (`../rpi5emu`, its
+machine, platform independent) on the sdlemu runtime (`../sdlemu`, its
 CLAUDE.md: the workflow, the Pi, the lessons), the 65C816 esp32emu's. The
 machine's own behaviour, lessons and tests are esp32gs's CLAUDE.md; this
 project is the glue.
@@ -10,9 +10,9 @@ project is the glue.
 
 | Path | What |
 |---|---|
-| `src/main.c` | The IIGS as an `emu_machine_t`: esp32gs's `main/main.c` through `../rpi5emu/tools/port_glue.py` and `port_finish.py`, then: memory up to 8 MB as on the Tab5, a new size allocated at the restart (the boards restart into it), the ROM message, no speaker stats; the core's host-build switches (`gs_host_no_iwm_skip`, ...) defined off |
+| `src/main.c` | The IIGS as an `emu_machine_t`: esp32gs's `main/main.c` through `../sdlemu/tools/port_glue.py` and `port_finish.py`, then: memory up to 8 MB as on the Tab5, a new size allocated at the restart (the boards restart into it), the ROM message, no speaker stats; the core's host-build switches (`gs_host_no_iwm_skip`, ...) defined off |
 | `src/settings.c` | esp32gs's, over `emu/nvs.h` (section `gs`: `ram_kb`, `bram` the battery RAM as hex) |
-| `src/rom_store.c` | `~/rpi5emu/apple2gs/roms/` through `emu_rom_read()`: gs_rom3.rom, chargen.rom |
+| `src/rom_store.c` | `~/sdlemu/apple2gs/roms/` through `emu_rom_read()`: gs_rom3.rom, chargen.rom |
 
 Keep `src/main.c` in step with esp32gs's `main/main.c`. The core's
 `#ifndef ESP_PLATFORM` parts are its host test build's instrumentation
@@ -21,10 +21,10 @@ Keep `src/main.c` in step with esp32gs's `main/main.c`. The core's
 ## Build, run, check
 
 ```sh
-../rpi5emu/tools/pi.sh rpi5gs build
-../rpi5emu/tools/pi.sh rpi5gs headless     # or run: the window here
-../rpi5emu/tools/console.sh 'K 36 1' @0.3 'K 7F 1' @0.3 'K 7F 0' @0.3 'K 36 0' @2 'T CATALOG\n'
-../rpi5emu/tools/pi.sh rpi5gs shot out.png
+../sdlemu/tools/pi.sh sdlgs build
+../sdlemu/tools/pi.sh sdlgs headless     # or run: the window here
+../sdlemu/tools/console.sh 'K 36 1' @0.3 'K 7F 1' @0.3 'K 7F 0' @0.3 'K 36 0' @2 'T CATALOG\n'
+../sdlemu/tools/pi.sh sdlgs shot out.png
 ```
 
 Console: the runtime's (`h`) and esp32gs's: `k <hex>` tap an ADB key (24
